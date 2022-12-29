@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import or_
 
 from app.models.users import User
 from app.schemas.users import UserCreate, UserProfileIn
@@ -11,6 +12,9 @@ def get_users(
     max_followers: int = None,
 ):
     query = db.query(User)
+    if text:
+        text = f"%{text}%"
+        query = query.filter(or_(User.username.like(text), User.bio.like(text)))
     if max_followers:
         query = query.filter(User.followers <= max_followers)
     if min_followers:
