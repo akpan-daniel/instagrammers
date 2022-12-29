@@ -1,0 +1,35 @@
+services:
+  api:
+    build:
+      context: .
+      # dockerfile: Dockerfile
+    container_name: ig_api
+    ports:
+      - "8001:8000"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  db:
+    image: "postgres:14"
+    container_name: ig_db
+    ports:
+      - "5433:${DB_PORT}"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgres}
+      POSTGRES_DB: ${DB_NAME:-instagrammers}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
