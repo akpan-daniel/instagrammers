@@ -14,7 +14,7 @@ def get_users(
     query = db.query(User)
     if text:
         text = f"%{text}%"
-        query = query.filter(or_(User.username.like(text), User.bio.like(text)))
+        query = query.filter(or_(User.username.ilike(text), User.bio.ilike(text)))
     if max_followers:
         query = query.filter(User.followers <= max_followers)
     if min_followers:

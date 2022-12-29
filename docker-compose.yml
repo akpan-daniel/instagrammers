@@ -5,7 +5,7 @@ services:
       # dockerfile: Dockerfile
     container_name: ig_api
     ports:
-      - "8001:8000"
+      - "8000:8000"
     restart: always
     deploy:
       mode: replicated
@@ -19,7 +19,7 @@ services:
     image: "postgres:14"
     container_name: ig_db
     ports:
-      - "5433:${DB_PORT}"
+      - "5433:${DB_PORT:-5432}"
     restart: always
     deploy:
       mode: replicated
@@ -28,6 +28,7 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASS:-postgres}
       POSTGRES_DB: ${DB_NAME:-instagrammers}
+      POSTGRES_PORT: ${DB_PORT:-5432}
     volumes:
       - pgdata:/var/lib/postgresql/data
 
